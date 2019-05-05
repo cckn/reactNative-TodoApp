@@ -7,33 +7,55 @@ import {
   Dimensions,
   Platform
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, ScrollView } from "react-native-gesture-handler";
+import Todo from "./Todo";
 
 const { height, width } = Dimensions.get("window");
 
 export default class App extends React.Component {
+  state = {
+    newTodo: ""
+  };
   render() {
+    const { newTodo } = this.state;
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Text style={styles.title}>DS TODO</Text>
+        <Text style={styles.title}>NEW TODO</Text>
         <View style={styles.card}>
-          <TextInput style={styles.input} placeholder="TODO" />
+          <TextInput
+            style={styles.input}
+            placeholder="TODO"
+            value={newTodo}
+            onChangeText={this._controlNewTodo}
+            placeholderTextColor="#999"
+            returnKeyType={"done"}
+            autoCorrect={false}
+          />
+          <ScrollView>
+            <Todo />
+          </ScrollView>
         </View>
       </View>
     );
   }
+
+  _controlNewTodo = text => {
+    this.setState({
+      newTodo: text
+    });
+  };
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f23657",
+    backgroundColor: "#E5DADB",
     alignItems: "center",
     justifyContent: "flex-start"
   },
   title: {
-    marginTop: 100,
+    marginTop: 50,
     fontSize: 40,
     color: "white",
     fontWeight: "200",
@@ -60,5 +82,11 @@ const styles = StyleSheet.create({
         elevation: 3
       }
     })
+  },
+  input: {
+    padding: 20,
+    borderBottomColor: "#bbb",
+    borderBottomWidth: 1,
+    fontSize: 25
   }
 });
