@@ -32,7 +32,7 @@ export default class App extends React.Component {
             returnKeyType={"done"}
             autoCorrect={false}
           />
-          <ScrollView>
+          <ScrollView contentContainerStyle = {styles.todos}>
             <Todo />
           </ScrollView>
         </View>
@@ -50,7 +50,7 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E5DADB",
+    backgroundColor: "#2057A7",
     alignItems: "center",
     justifyContent: "flex-start"
   },
@@ -88,5 +88,8 @@ const styles = StyleSheet.create({
     borderBottomColor: "#bbb",
     borderBottomWidth: 1,
     fontSize: 25
+  }
+  ,todos :{
+    alignItems:"center"
   }
 });
