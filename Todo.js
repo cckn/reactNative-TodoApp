@@ -4,17 +4,31 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  TextInput
 } from "react-native";
+
+import PropTypes from "prop-types";
 
 const { width, height } = Dimensions.get("window");
 class Todo extends Component {
-  state = {
-    isEditing: false,
-    isCompleted: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditing: false,
+      todoValue: props.text
+    };
+  }
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    isCompleted: PropTypes.bool.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired
   };
+
   render() {
-    const { isCompleted, isEditing } = this.state;
+    const { isEditing, todoValue, isCompleted } = this.state;
+    const { id, text, deleteTodo } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.column}>
@@ -26,15 +40,33 @@ class Todo extends Component {
               ]}
             />
           </TouchableOpacity>
-          <Text
-            style={[
-              styles.text,
-              isCompleted ? styles.completedText : styles.uncompletedText
-            ]}
-          >
-            {" "}
-            Hello i'm Todo Component!
-          </Text>
+
+          {/* TEXT View  */}
+          {isEditing ? (
+            <View>
+              <TextInput
+                value={todoValue}
+                style={[
+                  styles.text,
+                  styles.input,
+                  isCompleted ? styles.completedText : styles.uncompletedText
+                ]}
+                multiline={true}
+                onChangeText={this._controllInput}
+                returnKeyType="done"
+                onBlur={this._finishEditing}
+              />
+            </View>
+          ) : (
+            <Text
+              style={[
+                styles.text,
+                isCompleted ? styles.completedText : styles.uncompletedText
+              ]}
+            >
+              {text}
+            </Text>
+          )}
         </View>
         {isEditing ? (
           <View style={styles.actions}>
@@ -51,7 +83,11 @@ class Todo extends Component {
                 <Text style={styles.actionText}>✏️</Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPressOut={() => {
+                deleteTodo(id);
+              }}
+            >
               <View style={styles.actionContatiner}>
                 <Text style={styles.actionText}>❌</Text>
               </View>
@@ -80,6 +116,9 @@ class Todo extends Component {
     this.setState({
       isEditing: false
     });
+  };
+  _controllInput = text => {
+    this.setState({ todoValue: text });
   };
 }
 
@@ -117,7 +156,6 @@ const styles = StyleSheet.create({
   column: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
     width: width / 2
   },
   actions: { flexDirection: "row" },
@@ -127,7 +165,14 @@ const styles = StyleSheet.create({
     // borderColor: "black",
     // borderWidth: 1
   },
-  actionText: {}
+  actionText: {},
+  input: {
+    marginVertical: 15,
+    width: width / 2,
+    paddingBottom: 5
+  }
+
+  // borderBottomWidth:1
 });
 
 export default Todo;
