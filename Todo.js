@@ -33,7 +33,7 @@ class Todo extends Component {
             ]}
           >
             {" "}
-            Hello i'm Todo Component
+            Hello i'm Todo Component!
           </Text>
         </View>
         {isEditing ? (
