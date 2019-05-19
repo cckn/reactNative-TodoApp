@@ -25,12 +25,13 @@ class Todo extends Component {
     deleteTodo: PropTypes.func.isRequired,
     id: PropTypes.string.isRequired,
     uncompleteTodo: PropTypes.func.isRequired,
-    completeTodo: PropTypes.func.isRequired
+    completeTodo: PropTypes.func.isRequired,
+    updateTodo: PropTypes.func.isRequired
   };
 
   render() {
     const { isEditing, todoValue } = this.state;
-    const { id, text, deleteTodo ,isCompleted} = this.props;
+    const { id, text, deleteTodo, isCompleted } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.column}>
@@ -101,14 +102,12 @@ class Todo extends Component {
   }
 
   _toggleComplete = () => {
-    
-    const {isCompleted, uncompleteTodo, completeTodo, id} = this.props
+    const { isCompleted, uncompleteTodo, completeTodo, id } = this.props;
 
     if (isCompleted) {
-      uncompleteTodo(id)
-    }
-    else{
-      completeTodo(id)
+      uncompleteTodo(id);
+    } else {
+      completeTodo(id);
     }
   };
 
@@ -119,10 +118,14 @@ class Todo extends Component {
   };
 
   _finishEditing = () => {
+    const { todoValue } = this.state;
+    const { id, updateTodo } = this.props;
+    updateTodo(id,todoValue)
     this.setState({
       isEditing: false
     });
   };
+
   _controllInput = text => {
     this.setState({ todoValue: text });
   };
