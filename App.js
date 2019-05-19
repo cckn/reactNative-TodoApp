@@ -49,7 +49,13 @@ export default class App extends React.Component {
           />
           <ScrollView contentContainerStyle={styles.todos}>
             {Object.values(todos).map(todo => (
-              <Todo key={todo.id} {...todo} deleteTodo={this._deleteTodo} />
+              <Todo
+                key={todo.id}
+                deleteTodo={this._deleteTodo}
+                uncompleteTodo={this._uncompleteTodo}
+                completeTodo={this._completeTodo}
+                {...todo}
+              />
             ))}
           </ScrollView>
         </View>
@@ -97,6 +103,39 @@ export default class App extends React.Component {
       const newState = {
         ...prevState,
         ...todos
+      };
+      return { ...newState };
+    });
+  };
+
+  _uncompleteTodo = id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState, // 기존의 State 요소들
+        todos: {
+          ...prevState.todos, // 기존의 Todos
+          [id]: {
+            // 이전의 id가 동일한 Todo가 있다면 덮어쓰기
+            ...prevState.todos[id],
+            isCompleted: false // 완료 상태는 False로 변경하고
+          }
+        }
+      };
+      return { ...newState };
+    });
+  };
+
+  _completeTodo = id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        todos: {
+          ...prevState.todos,
+          [id]: {
+            ...prevState.todos[id],
+            isCompleted: true
+          }
+        }
       };
       return { ...newState };
     });
